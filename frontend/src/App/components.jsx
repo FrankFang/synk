@@ -25,6 +25,9 @@ export const BigTextarea = styled.textarea`
   max-width: 80vw;
   min-height: 160px;
   line-height: 20px;
+  &.draging {
+    border-color: red;
+  }
 `;
 export const Center = styled.div`
   display: flex;
