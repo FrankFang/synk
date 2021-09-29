@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import cs from "classnames";
+import styled from 'styled-components'
 import {
   BigTextarea,
   Button,
@@ -24,6 +25,9 @@ const uploadFile = (blob) => {
   });
 };
 
+const Pop = styled.div`
+  padding: 16px;
+`
 function App() {
   const onSubmit = (e) => {
     e.preventDefault();
@@ -31,12 +35,15 @@ function App() {
       .post("http://127.0.0.1:8080/api/v1/texts", {
         raw: formData.raw,
       })
-      .then(() => {
+      .then(({data}) => {
         const close = createDialog(
-          <>
+          <Pop>
             <div>上传成功</div>
+            <div>
+              <img src={`http://127.0.0.1:8080${data.url}`} alt="" />
+            </div>
             <button onClick={() => close()}>关闭</button>
-          </>
+          </Pop>
         );
       });
   };

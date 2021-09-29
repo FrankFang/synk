@@ -1,7 +1,6 @@
 package synk
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -28,7 +27,9 @@ func TextsController(c *gin.Context) {
 	filename := uuid.New().String()
 	fileErr := qrcode.WriteFile(json.Raw, qrcode.Medium, 256,
 		filepath.Join(dir, "uploads", filename+".png"))
-	fmt.Println(fileErr, filepath.Join(dir, "uploads", filename+".png"))
-	c.JSON(http.StatusOK, gin.H{"status": "you are logged in"})
+	if fileErr != nil {
+		log.Fatal(fileErr)
+	}
+	c.JSON(http.StatusOK, gin.H{"url": "/uploads/" + filename + ".png"})
 
 }

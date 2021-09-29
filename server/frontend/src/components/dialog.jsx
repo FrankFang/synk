@@ -7,13 +7,10 @@ const DialogOverlay = styled.div`
   height: 100%; left: 0; top: 0;
 `;
 const DialogContent = styled.div`
-  position: fixed;
-  z-index: 11;
-  width: 200px;
-  height: 300px;
-  background: white;
-  margin: auto;
-  top: 0; left: 0; bottom: 0; right: 0;
+  position: fixed; z-index: 11; min-width: 200px; min-height: 100px;
+  max-width: 100%; max-height: 100%; background: white; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 8px;
 `;
 
 export const Dialog = ({ container, onClickOverlay, children }) => {

@@ -1,4 +1,4 @@
-package synk
+package main
 
 import (
 	"embed"
