@@ -10,6 +10,25 @@ import {
 } from "./App/components";
 import axios from "axios";
 
+document.onpaste = function (e) {
+  const {
+    items: [item],
+  } = e.clipboardData;
+  uploadFile(item.getAsFile());
+};
+const uploadFile = (blob) => {
+  const formData = new FormData();
+  formData.append("raw", blob);
+  return axios({
+    method: "post",
+    url: "http://127.0.0.1:8080/api/v1/files",
+    data: formData,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
 function App() {
   const onSubmit = (e) => {
     e.preventDefault();
@@ -30,16 +49,7 @@ function App() {
     console.log(e.dataTransfer.items);
     const data = e.dataTransfer.items[0];
     var blob = data.getAsFile();
-    const x = new FormData();
-    x.append("raw", blob);
-    axios({
-      method: 'post',
-      url: "http://127.0.0.1:8080/api/v1/files",
-      data: x,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    uploadFile(blob);
   };
 
   return (
