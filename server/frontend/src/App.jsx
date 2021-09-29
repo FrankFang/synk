@@ -10,12 +10,12 @@ import {
 } from "./App/components";
 import axios from "axios";
 
-document.onpaste = function (e) {
-  const {
-    items: [item],
-  } = e.clipboardData;
-  uploadFile(item.getAsFile());
-};
+// document.onpaste = function (e) {
+//   const {
+//     items: [item],
+//   } = e.clipboardData;
+//   uploadFile(item.getAsFile());
+// };
 const uploadFile = (blob) => {
   const formData = new FormData();
   formData.append("raw", blob);
@@ -46,14 +46,23 @@ function App() {
   };
   const onDrop = (e) => {
     e.preventDefault();
-    console.log(e.dataTransfer.items);
-    const data = e.dataTransfer.items[0];
-    var blob = data.getAsFile();
+    const blob = e.dataTransfer?.items?.[0]?.getAsFile();
+    if (!blob) return;
     uploadFile(blob);
+  };
+  const onPaste = (e) => {
+    const {
+      items: [item],
+    } = e.clipboardData;
+    uploadFile(item.getAsFile());
   };
 
   return (
-    <Layout onDrop={onDrop} onDragOver={(e) => e.preventDefault()}>
+    <Layout
+      onPaste={onPaste}
+      onDrop={onDrop}
+      onDragOver={(e) => e.preventDefault()}
+    >
       <GlobalStyle />
       <h1>同步传</h1>
       <div>{JSON.stringify(formData)}</div>
