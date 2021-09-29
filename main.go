@@ -1,4 +1,4 @@
-package main
+package synk
 
 import (
 	"embed"
@@ -8,7 +8,7 @@ import (
 	"runtime"
 	"sync"
 
-	synk "mycompany.com/mytest/server"
+	server "synk/server"
 )
 
 //go:embed server/frontend/dist/*
@@ -21,7 +21,7 @@ func main() {
 	}
 	// ui, _ := lorca.New("", "", 800, 600, "--disable-sync", " --disable-translate")
 	// defer ui.Close()
-	go synk.Run()
+	go server.Run()
 	// ui.Load("http://127.0.0.1:8080/static/index.html")
 
 	// Wait until the interrupt signal arrives or browser window is closed

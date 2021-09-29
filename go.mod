@@ -1,5 +1,4 @@
-module mycompany.com/mytest
-
+module synk
 go 1.16
 
 require (
