@@ -14,6 +14,7 @@ require (
 	github.com/silenceper/gowatch v1.5.1 // indirect
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/ugorji/go v1.2.6 // indirect
+	github.com/zserge/lorca v0.1.10 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
 	golang.org/x/sys v0.0.0-20210921065528-437939a70204 // indirect
 	golang.org/x/text v0.3.7 // indirect

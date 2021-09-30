@@ -21,7 +21,7 @@ func main() {
 	}
 	// ui, _ := lorca.New("", "", 800, 600, "--disable-sync", " --disable-translate")
 	// defer ui.Close()
-	go server.Run()
+	go server.Run() // 8080
 	// ui.Load("http://127.0.0.1:8080/static/index.html")
 
 	// Wait until the interrupt signal arrives or browser window is closed

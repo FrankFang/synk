@@ -2,3 +2,4 @@
 /main
 /main.exe
 *.log
+/go-demo-*

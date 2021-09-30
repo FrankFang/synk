@@ -7,13 +7,13 @@ const DialogOverlay = styled.div`
   height: 100%; left: 0; top: 0;
 `;
 const DialogContent = styled.div`
-  position: fixed; z-index: 11; min-width: 200px; min-height: 100px;
+  position: fixed; z-index: 11; min-width: 120px; min-height: 40px;
   max-width: 100%; max-height: 100%; background: white; top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 8px;
 `;
 
-export const Dialog = ({ container, onClickOverlay, children }) => {
+export const Dialog = ({ container, onClickOverlay, children, }) => {
   return createPortal(
     <>
       <DialogOverlay onClick={onClickOverlay} />
@@ -23,12 +23,14 @@ export const Dialog = ({ container, onClickOverlay, children }) => {
   );
 };
 
-export const createDialog = (content) => {
+export const createDialog = (content, closeOnClickOverlay ) => {
   const div = document.createElement("div");
   div.className = "tempApp";
   document.body.append(div);
   const onClickOverlay = () => {
-    close();
+    if(closeOnClickOverlay){
+      close();
+    }
   };
   render(
     <Dialog container={div} onClickOverlay={onClickOverlay}>
