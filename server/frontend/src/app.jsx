@@ -8,9 +8,12 @@ import {
   Form,
   GlobalStyle,
   Layout,
+  showUploadFailDialog,
+  showUploadingDialog,
+  showUploadSuccessDialog,
 } from "./app/components";
 import axios from "axios";
-import { createDialog } from "./components/dialog";
+import { prefetch } from "./shared/prefetch";
 
 const uploadFile = (blob) => {
   const formData = new FormData();
@@ -25,67 +28,16 @@ const uploadFile = (blob) => {
   });
 };
 
-const Pop = styled.div`
-  padding: 16px;
-`;
-const Loading = styled(Center)`
-  flex-direction: column;
-  padding: 8px;
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100%{
-      transform: rotate(360deg);
-    }
-  }
-  > svg {
-    animation: spin 3s ease-in-out infinite;
-    width: 40px;
-    height: 40px;
-    margin: 16px;
-  }
-`
+
 function App() {
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    const closeLoading = createDialog(
-      <Loading>
-        <svg>
-          <use xlinkHref="#icon-loading" />
-        </svg>
-        <p>上传中</p>
-      </Loading>
-    );
-    return axios
-      .post("http://127.0.0.1:8080/api/v1/texts", {
-        raw: formData.raw,
-      })
-      .then(({ data }) => {
-        const picture = new Image()
-        picture.src = `http://127.0.0.1:8080${data.url}`
-        picture.onload = ()=>{
-          closeLoading();
-          const close = createDialog(
-            <Pop>
-              <div>上传成功</div>
-              <div>
-                <img src={picture.src}/>
-              </div>
-              <button onClick={() => close()}>关闭</button>
-            </Pop>
-          );
-        }
-        picture.onerror = ()=>{
-          closeLoading();
-          const close = createDialog(
-            <Pop>
-              <div>上传失败</div>
-              <button onClick={() => close()}>关闭</button>
-            </Pop>
-          )
-        }
-      });
+    const close = showUploadingDialog()
+    const { data } = await axios.post("http://127.0.0.1:8080/api/v1/texts", { raw: formData.raw });
+    await prefetch(`http://127.0.0.1:8080${data.url}`)
+      .finally(close)
+      .catch(showUploadFailDialog);
+    showUploadSuccessDialog(data);
   };
   const [bigTextareClass, setBigTextareaClass] = useState("default");
   const [formData, setFormData] = useState({});
