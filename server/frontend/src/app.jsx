@@ -28,15 +28,16 @@ const uploadFile = (blob) => {
   });
 };
 
-
 function App() {
   const onSubmit = async (e) => {
     e.preventDefault();
-    const close = showUploadingDialog()
-    const { data } = await axios.post("http://127.0.0.1:8080/api/v1/texts", { raw: formData.raw });
+    const close = showUploadingDialog();
+    const { data } = await axios.post("http://127.0.0.1:8080/api/v1/texts", {
+      raw: formData.raw,
+    });
     await prefetch(`http://127.0.0.1:8080${data.url}`)
       .finally(close)
-      .catch(showUploadFailDialog);
+      .catch(() => (showUploadFailDialog(), Promise.reject()));
     showUploadSuccessDialog(data);
   };
   const [bigTextareClass, setBigTextareaClass] = useState("default");
@@ -47,11 +48,16 @@ function App() {
   const onDragLeave = (e) => {
     setBigTextareaClass("default");
   };
-  const onDrop = (e) => {
+  const onDrop = async (e) => {
     e.preventDefault();
     const blob = e.dataTransfer?.items?.[0]?.getAsFile();
     if (!blob) return;
-    uploadFile(blob);
+    const close = showUploadingDialog();
+    const { data } = await uploadFile(blob);
+    await prefetch(`http://127.0.0.1:8080${data.url}`)
+      .finally(close)
+      .catch(() => (showUploadFailDialog(), Promise.reject()));
+    showUploadSuccessDialog(data);
   };
   const onPaste = (e) => {
     const {

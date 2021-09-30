@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/skip2/go-qrcode"
 )
 
 func FilesController(c *gin.Context) {
@@ -24,10 +25,15 @@ func FilesController(c *gin.Context) {
 		log.Fatal(err)
 	}
 	filename := uuid.New().String()
-	fileErr := c.SaveUploadedFile(file, filepath.Join(dir, "uploads", filename+filepath.Ext(file.Filename)))
+	fullpath := filepath.Join("uploads", filename+filepath.Ext(file.Filename))
+	fileErr := c.SaveUploadedFile(file, filepath.Join(dir, fullpath))
 	if fileErr != nil {
 		log.Fatal(fileErr)
 	}
-	c.JSON(http.StatusOK, gin.H{"status": "you are logged in"})
-
+	qrErr := qrcode.WriteFile("http://127.0.0.1:8080/"+fullpath, qrcode.Medium, 256,
+		filepath.Join(dir, fullpath+"-qr.png"))
+	if qrErr != nil {
+		log.Fatal(qrErr)
+	}
+	c.JSON(http.StatusOK, gin.H{"url": "/" + fullpath + "-qr.png"})
 }
