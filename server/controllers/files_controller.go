@@ -30,7 +30,7 @@ func FilesController(c *gin.Context) {
 	if fileErr != nil {
 		log.Fatal(fileErr)
 	}
-	qrErr := qrcode.WriteFile("http://127.0.0.1:8080/"+fullpath, qrcode.Medium, 256,
+	qrErr := qrcode.WriteFile("http://192.168.3.57:8080/"+fullpath, qrcode.Medium, 256,
 		filepath.Join(dir, fullpath+"-qr.png"))
 	if qrErr != nil {
 		log.Fatal(qrErr)

@@ -4,6 +4,7 @@ import (
 	"embed"
 	"io/fs"
 	"log"
+	"net"
 	"net/http"
 
 	controllers "synk/server/controllers"
@@ -16,6 +17,15 @@ import (
 var FS embed.FS
 
 func Run() {
+	addrs, _ := net.InterfaceAddrs()
+	for _, address := range addrs {
+		// check the address type and if it is not a loopback the display it
+		if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+			if ipnet.IP.To4() != nil {
+				println(ipnet.IP.String())
+			}
+		}
+	}
 	gin.SetMode(gin.ReleaseMode)
 	gin.DisableConsoleColor()
 	router := gin.Default()
