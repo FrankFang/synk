@@ -1,19 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import cs from "classnames";
-import styled from "styled-components";
 import {
   BigTextarea,
   Button,
-  Center,
   Form,
   GlobalStyle,
   Layout,
-  showUploadFailDialog,
   showUploadingDialog,
   showUploadSuccessDialog,
 } from "./app/components";
 import axios from "axios";
-import { prefetch } from "./shared/prefetch";
+import { AppContext } from "./shared/app_context";
+import { Center } from "./components/center";
 
 const uploadFile = (blob) => {
   const formData = new FormData();
@@ -29,16 +27,25 @@ const uploadFile = (blob) => {
 };
 
 function App() {
+  const [addresses, setAddresses] = useState([]);
+  useEffect(async () => {
+    const {
+      data: { addresses },
+    } = await axios
+      .get("http://127.0.0.1:8080/api/v1/addresses")
+      .catch((e) => Promise.reject(e));
+    setAddresses(addresses);
+  }, []);
   const onSubmit = async (e) => {
     e.preventDefault();
     const close = showUploadingDialog();
-    const { data } = await axios.post("http://127.0.0.1:8080/api/v1/texts", {
+    const {
+      data: { content },
+    } = await axios.post("http://127.0.0.1:8080/api/v1/texts", {
       raw: formData.raw,
     });
-    await prefetch(`http://127.0.0.1:8080${data.url}`)
-      .finally(close)
-      .catch(() => (showUploadFailDialog(), Promise.reject()));
-    showUploadSuccessDialog(data);
+    close();
+    showUploadSuccessDialog({ addresses, content });
   };
   const [bigTextareClass, setBigTextareaClass] = useState("default");
   const [formData, setFormData] = useState({});
@@ -53,43 +60,46 @@ function App() {
     const blob = e.dataTransfer?.items?.[0]?.getAsFile();
     if (!blob) return;
     const close = showUploadingDialog();
-    const { data } = await uploadFile(blob);
-    await prefetch(`http://127.0.0.1:8080${data.url}`)
-      .finally(close)
-      .catch(() => (showUploadFailDialog(), Promise.reject()));
-    showUploadSuccessDialog(data);
+    const {
+      data: { url },
+    } = await uploadFile(blob);
+    close();
+    showUploadSuccessDialog({ addresses, url });
   };
   const onPaste = (e) => {
     const {
       items: [item],
     } = e.clipboardData;
-    uploadFile(item.getAsFile());
+    const file = item?.getAsFile();
+    if (!file) return;
+    uploadFile(file);
   };
 
   return (
-    <Layout
-      onPaste={onPaste}
-      onDrop={onDrop}
-      onDragOver={(e) => e.preventDefault()}
-    >
-      <GlobalStyle />
-      <h1>同步传</h1>
-      <div>{JSON.stringify(formData)}</div>
-      <Form className="uploadForm" onSubmit={onSubmit}>
-        <div className="row">
-          <BigTextarea
-            className={cs(bigTextareClass)}
-            value={formData.raw}
-            onChange={(e) => setFormData({ raw: e.target.value })}
-            onDragOver={onDragOver}
-            onDragLeave={onDragLeave}
-          />
-        </div>
-        <Center className="row">
-          <Button type="submit">上传</Button>
-        </Center>
-      </Form>
-    </Layout>
+    <AppContext.Provider value={addresses}>
+      <Layout
+        onPaste={onPaste}
+        onDrop={onDrop}
+        onDragOver={(e) => e.preventDefault()}
+      >
+        <GlobalStyle />
+        <h1>同步传</h1>
+        <Form className="uploadForm" onSubmit={onSubmit}>
+          <div className="row">
+            <BigTextarea
+              className={cs(bigTextareClass)}
+              value={formData.raw}
+              onChange={(e) => setFormData({ raw: e.target.value })}
+              onDragOver={onDragOver}
+              onDragLeave={onDragLeave}
+            />
+          </div>
+          <Center className="row">
+            <Button type="submit">上传</Button>
+          </Center>
+        </Form>
+      </Layout>
+    </AppContext.Provider>
   );
 }
 

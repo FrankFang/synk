@@ -4,7 +4,6 @@ import (
 	"embed"
 	"io/fs"
 	"log"
-	"net"
 	"net/http"
 
 	controllers "synk/server/controllers"
@@ -17,20 +16,13 @@ import (
 var FS embed.FS
 
 func Run() {
-	addrs, _ := net.InterfaceAddrs()
-	for _, address := range addrs {
-		// check the address type and if it is not a loopback the display it
-		if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
-			if ipnet.IP.To4() != nil {
-				println(ipnet.IP.String())
-			}
-		}
-	}
 	gin.SetMode(gin.ReleaseMode)
 	gin.DisableConsoleColor()
 	router := gin.Default()
 	initializers.InitCors(router)
 	router.GET("/uploads/:path", controllers.UploadsController)
+	router.GET("/api/v1/addresses", controllers.AddressesController)
+	router.GET("/api/v1/qrcodes", controllers.QrcodesController)
 	router.POST("/api/v1/files", controllers.FilesController)
 	router.POST("/api/v1/texts", controllers.TextsController)
 	staticFiles, _ := fs.Sub(FS, "frontend/dist")

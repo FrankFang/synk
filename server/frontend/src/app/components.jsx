@@ -1,6 +1,8 @@
 import { createDialog } from "../components/dialog";
 import styled, { createGlobalStyle } from "styled-components";
-import * as React from 'react'
+import * as React from "react";
+import { Qrcode } from "../components/qrcode";
+import { Loading } from "../components/loading";
 export const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box; padding: 0;
@@ -13,6 +15,18 @@ margin: 0;
   }
   a {text-decoration: none;}
   input {font: inherit;}
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100%{
+      transform: rotate(360deg);
+    }
+  }
+  img{vertical-align: middle;}
+  .spin {
+    animation: spin 2s linear infinite;
+  }
 `;
 
 export const Layout = styled.div`
@@ -31,11 +45,6 @@ export const BigTextarea = styled.textarea`
     border-color: red;
   }
 `;
-export const Center = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 export const Button = styled.button`
   min-height: 40px;
   padding: 0 60px;
@@ -48,16 +57,35 @@ export const Form = styled.form`
     margin: 16px 0;
   }
 `;
-
-export const showUploadSuccessDialog = (data) => {
-  const close = createDialog(
+const UploadSuccessDialog = ({ addresses, content, onClose }) => {
+  return (
     <Pop>
       <div>上传成功</div>
       <div>
-        <img src={`http://127.0.0.1:8080${data.url}`} />
+        <label>
+          <span>请选择当前局域网IP</span>
+          <select>
+            <option value="">- 请选择 -</option>
+            {addresses.map((string) => (
+              <option key={string}>{string}</option>
+            ))}
+          </select>
+        </label>
       </div>
-      <button onClick={() => close()}>关闭</button>
+      <div>
+        <Qrcode content={content} />
+      </div>
+      <button onClick={onClose}>关闭</button>
     </Pop>
+  );
+};
+export const showUploadSuccessDialog = ({ addresses, content }) => {
+  const close = createDialog(
+    <UploadSuccessDialog
+      addresses={addresses}
+      content={content}
+      onClose={() => close()}
+    />
   );
 };
 export const showUploadFailDialog = () => {
@@ -70,32 +98,9 @@ export const showUploadFailDialog = () => {
 };
 export const showUploadingDialog = () => {
   return createDialog(
-    <Loading>
-      <svg>
-        <use xlinkHref="#icon-loading" />
-      </svg>
-      <p>上传中</p>
-    </Loading>
+    <Loading>上传中</Loading>
   );
 };
 const Pop = styled.div`
   padding: 16px;
-`;
-const Loading = styled(Center)`
-  flex-direction: column;
-  padding: 8px;
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100%{
-      transform: rotate(360deg);
-    }
-  }
-  > svg {
-    animation: spin 3s ease-in-out infinite;
-    width: 40px;
-    height: 40px;
-    margin: 16px;
-  }
 `;
