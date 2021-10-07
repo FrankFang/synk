@@ -1,6 +1,6 @@
 import { createDialog } from "../components/dialog";
 import styled, { createGlobalStyle } from "styled-components";
-import * as React from "react";
+import React, { useState } from "react";
 import { Qrcode } from "../components/qrcode";
 import { Loading } from "../components/loading";
 export const GlobalStyle = createGlobalStyle`
@@ -26,6 +26,9 @@ margin: 0;
   img{vertical-align: middle;}
   .spin {
     animation: spin 2s linear infinite;
+  }
+  :focus{
+    outline: none;
   }
 `;
 
@@ -57,23 +60,42 @@ export const Form = styled.form`
     margin: 16px 0;
   }
 `;
+
+const Span = styled.span`
+  margin-right: 8px;
+`;
+const Select = styled.select`
+  height: 40px;
+
+`;
+const Label = styled.label`
+  display: flex; padding: 4px 0; margin: 4px 0;
+  justify-content: flex-start; align-items: center;
+  min-height: 40px;
+`;
 const UploadSuccessDialog = ({ addresses, content, onClose }) => {
+  const [address, setAddress] = useState("");
+  const onChange = (e) => {
+    setAddress(e.target.value);
+  };
   return (
     <Pop>
       <div>上传成功</div>
       <div>
-        <label>
-          <span>请选择当前局域网IP</span>
-          <select>
-            <option value="">- 请选择 -</option>
+        <Label>
+          <Span>请选择当前局域网IP</Span>
+          <select value={address} onChange={onChange}>
+            <option value="" disabled>
+              - 请选择 -
+            </option>
             {addresses.map((string) => (
               <option key={string}>{string}</option>
             ))}
           </select>
-        </label>
+        </Label>
       </div>
       <div>
-        <Qrcode content={content} />
+        <Qrcode host={address} content={content} />
       </div>
       <button onClick={onClose}>关闭</button>
     </Pop>
@@ -97,9 +119,7 @@ export const showUploadFailDialog = () => {
   );
 };
 export const showUploadingDialog = () => {
-  return createDialog(
-    <Loading>上传中</Loading>
-  );
+  return createDialog(<Loading>上传中</Loading>);
 };
 const Pop = styled.div`
   padding: 16px;
