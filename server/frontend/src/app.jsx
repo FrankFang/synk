@@ -7,7 +7,8 @@ import {
   GlobalStyle,
   Layout,
   showUploadingDialog,
-  showUploadSuccessDialog,
+  showUploadTextSuccessDialog,
+  showUploadFileSuccessDialog,
 } from "./app/components";
 import axios from "axios";
 import { AppContext } from "./shared/app_context";
@@ -45,7 +46,7 @@ function App() {
       raw: formData.raw,
     });
     close();
-    showUploadSuccessDialog({ addresses, content });
+    showUploadTextSuccessDialog({ addresses, content });
   };
   const [bigTextareClass, setBigTextareaClass] = useState("default");
   const [formData, setFormData] = useState({});
@@ -64,7 +65,10 @@ function App() {
       data: { url },
     } = await uploadFile(blob);
     close();
-    showUploadSuccessDialog({ addresses, url });
+    showUploadFileSuccessDialog({
+      addresses,
+      content: (addr) => addr && `http://${addr}:8080${url}`,
+    });
   };
   const onPaste = (e) => {
     const {

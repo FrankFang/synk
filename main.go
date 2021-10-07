@@ -2,10 +2,8 @@ package main
 
 import (
 	"embed"
-	"log"
 	"os"
 	"os/signal"
-	"runtime"
 	"sync"
 
 	server "synk/server"
@@ -15,13 +13,9 @@ import (
 var FS embed.FS
 
 func main() {
-	args := []string{}
-	if runtime.GOOS == "linux" {
-		args = append(args, "--class=Lorca")
-	}
+	go server.Run() // 8080
 	// ui, _ := lorca.New("", "", 800, 600, "--disable-sync", " --disable-translate")
 	// defer ui.Close()
-	go server.Run() // 8080
 	// ui.Load("http://127.0.0.1:8080/static/index.html")
 
 	// Wait until the interrupt signal arrives or browser window is closed
@@ -38,5 +32,4 @@ func main() {
 		}
 	}()
 	endWaiter.Wait()
-	log.Println("Bye")
 }

@@ -6,26 +6,26 @@ const MyLoading = styled(Loading)`
   width: 256px;
   height: 256px;
 `;
-export const Qrcode = ({ host, content }) => {
+export const Qrcode = ({ content }) => {
   const [image, setImage] = useState(null);
-  host = host || "127.0.0.1";
   content = encodeURIComponent(content);
-  const url = `http://${host}:8080/api/v1/qrcodes?content=${content}`;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   useEffect(() => {
+    if (!content) return;
+    const url = `http://127.0.0.1:8080/api/v1/qrcodes?content=${content}`;
     setLoading(true);
     prefetch(url)
       .then(
         () => setImage(<img width="256" height="256" src={url} />),
-        () => setError({})
+        (e) => setError(e)
       )
       .finally(() => setLoading(false));
-  }, [url]);
+  }, [content]);
   return loading ? (
-    <MyLoading>加载中2</MyLoading>
+    <MyLoading>加载中</MyLoading>
   ) : error ? (
-    <div>加载二维码出错</div>
+    <div>加载二维码出错：{JSON.stringify(error)}</div>
   ) : (
     image
   );

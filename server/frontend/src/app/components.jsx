@@ -1,6 +1,6 @@
 import { createDialog } from "../components/dialog";
 import styled, { createGlobalStyle } from "styled-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Qrcode } from "../components/qrcode";
 import { Loading } from "../components/loading";
 export const GlobalStyle = createGlobalStyle`
@@ -74,9 +74,10 @@ const Label = styled.label`
   min-height: 40px;
 `;
 const UploadSuccessDialog = ({ addresses, content, onClose }) => {
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState(localStorage.getItem("address") || "");
   const onChange = (e) => {
     setAddress(e.target.value);
+    localStorage.setItem("address", e.target.value);
   };
   return (
     <Pop>
@@ -95,13 +96,26 @@ const UploadSuccessDialog = ({ addresses, content, onClose }) => {
         </Label>
       </div>
       <div>
-        <Qrcode host={address} content={content} />
+        {content ? (
+          <Qrcode
+            content={typeof content === "string" ? content : content(address)}
+          />
+        ) : null}
       </div>
       <button onClick={onClose}>关闭</button>
     </Pop>
   );
 };
-export const showUploadSuccessDialog = ({ addresses, content }) => {
+export const showUploadTextSuccessDialog = ({ addresses, content }) => {
+  const close = createDialog(
+    <UploadSuccessDialog
+      addresses={addresses}
+      content={content}
+      onClose={() => close()}
+    />
+  );
+};
+export const showUploadFileSuccessDialog = ({ addresses, content }) => {
   const close = createDialog(
     <UploadSuccessDialog
       addresses={addresses}
