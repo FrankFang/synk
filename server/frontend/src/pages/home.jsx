@@ -9,7 +9,7 @@ import {
   showUploadingDialog,
   showUploadTextSuccessDialog,
   showUploadFileSuccessDialog,
-} from "../app/components";
+} from "./home_components";
 import axios from "axios";
 import { AppContext } from "../shared/app_context";
 import { Center } from "../components/center";
@@ -58,25 +58,33 @@ export function Home() {
   };
   const onDrop = async (e) => {
     e.preventDefault();
-    const blob = e.dataTransfer?.items?.[0]?.getAsFile();
-    if (!blob) return;
+    const file = e.dataTransfer?.items?.[0]?.getAsFile();
+    if (!file) return;
     const close = showUploadingDialog();
     const {
       data: { url },
-    } = await uploadFile(blob);
+    } = await uploadFile(file);
     close();
     showUploadFileSuccessDialog({
       addresses,
       content: (addr) => addr && `http://${addr}:8080${url}`,
     });
   };
-  const onPaste = (e) => {
+  const onPaste = async (e) => {
     const {
       items: [item],
     } = e.clipboardData;
     const file = item?.getAsFile();
     if (!file) return;
-    uploadFile(file);
+    const close = showUploadingDialog();
+    const {
+      data: { url },
+    } = await uploadFile(file);
+    close();
+    showUploadFileSuccessDialog({
+      addresses,
+      content: (addr) => addr && `http://${addr}:8080${url}`,
+    });
   };
 
   return (
@@ -106,5 +114,3 @@ export function Home() {
     </AppContext.Provider>
   );
 }
-
-
