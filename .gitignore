@@ -3,3 +3,4 @@
 /*.exe
 *.log
 /go-demo-*
+node_modules

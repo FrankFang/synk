@@ -9,10 +9,10 @@ import {
   showUploadingDialog,
   showUploadTextSuccessDialog,
   showUploadFileSuccessDialog,
-} from "./app/components";
+} from "../app/components";
 import axios from "axios";
-import { AppContext } from "./shared/app_context";
-import { Center } from "./components/center";
+import { AppContext } from "../shared/app_context";
+import { Center } from "../components/center";
 
 const uploadFile = (blob) => {
   const formData = new FormData();
@@ -27,7 +27,7 @@ const uploadFile = (blob) => {
   });
 };
 
-function App() {
+export function Home() {
   const [addresses, setAddresses] = useState([]);
   useEffect(async () => {
     const {
@@ -107,6 +107,4 @@ function App() {
   );
 }
 
-export default App;
 
-// GOOS=macos GOARCH=darwin go build
