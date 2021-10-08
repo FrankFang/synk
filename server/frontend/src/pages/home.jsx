@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { GlobalStyle, Layout } from "./home_components";
 import axios from "axios";
-import { AppContext } from "src/shared/app_context";
+import { Switch, Route } from "react-router";
+import React, { useEffect, useState } from "react";
+import { AppContext } from "../shared/app_context";
+import { GlobalStyle, Layout } from "./home/components";
 import { UploadTextForm } from "./home/upload_text_form";
-import {Switch, Route} from 'react-router'
 
 export function Home() {
   const [addresses, setAddresses] = useState([]);

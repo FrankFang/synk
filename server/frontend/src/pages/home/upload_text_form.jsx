@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import cs from "classnames";
-import { Center } from "src/components/center";
 import {
   BigTextarea,
   Button,
@@ -8,7 +7,9 @@ import {
   showUploadingDialog,
   showUploadTextSuccessDialog,
   showUploadFileSuccessDialog,
-} from "src/pages/home_components";
+} from "../../pages/home/components";
+import { AppContext } from "../../shared/app_context";
+import { Center } from "../../components/center";
 import axios from "axios";
 const uploadFile = (blob) => {
   const formData = new FormData();
@@ -23,7 +24,6 @@ const uploadFile = (blob) => {
   });
 };
 
-import { AppContext } from "src/shared/app_context";
 export const UploadTextForm = () => {
   const { addresses } = useContext(AppContext);
   const [bigTextareClass, setBigTextareaClass] = useState("default");

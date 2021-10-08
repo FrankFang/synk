@@ -1,8 +1,8 @@
-import { createDialog } from "../components/dialog";
+import { createDialog } from "../../components/dialog";
 import styled, { createGlobalStyle } from "styled-components";
-import React, { useEffect, useState } from "react";
-import { Qrcode } from "../components/qrcode";
-import { Loading } from "../components/loading";
+import React, { useState } from "react";
+import { Qrcode } from "../../components/qrcode";
+import { Loading } from "../../components/loading";
 export const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box; padding: 0;
@@ -63,10 +63,6 @@ export const Form = styled.form`
 
 const Span = styled.span`
   margin-right: 8px;
-`;
-const Select = styled.select`
-  height: 40px;
-
 `;
 const Label = styled.label`
   display: flex; padding: 4px 0; margin: 4px 0;
