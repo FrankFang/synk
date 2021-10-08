@@ -1,47 +1,18 @@
 import { createDialog } from "../../components/dialog";
-import styled, { createGlobalStyle } from "styled-components";
+import styled from "styled-components";
 import React, { useState } from "react";
 import { Qrcode } from "../../components/qrcode";
 import { Loading } from "../../components/loading";
-export const GlobalStyle = createGlobalStyle`
-  * {
-    box-sizing: border-box; padding: 0;
-margin: 0;
-  }
-  *::before, *::after {box-sizing: border-box;}
-  body {
-    font-size: 16px;
-    font-family: -apple-system, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
-  }
-  a {text-decoration: none;}
-  input {font: inherit;}
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100%{
-      transform: rotate(360deg);
-    }
-  }
-  img{vertical-align: middle;}
-  .spin {
-    animation: spin 2s linear infinite;
-  }
-  :focus{
-    outline: none;
-  }
-`;
 
 export const Layout = styled.div`
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  min-height: 100vh; display: flex; align-items: stretch; flex-direction: column;
+  padding: 0 16px; margin: 0 auto;
+  @media (min-width: 414px) {
+    max-width: 600px; 
+  }
 `;
 export const BigTextarea = styled.textarea`
-  width: 400px;
-  max-width: 80vw;
+  width: 100%;
   min-height: 160px;
   line-height: 20px;
   &.draging {

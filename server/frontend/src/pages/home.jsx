@@ -1,10 +1,18 @@
 import axios from "axios";
 import { Switch, Route } from "react-router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AppContext } from "../shared/app_context";
-import { GlobalStyle, Layout } from "./home/components";
+import { Layout } from "./home/components";
 import { UploadTextForm } from "./home/upload_text_form";
+import styled from "styled-components";
+import { GlobalStyle } from "../shared/global_style";
+import { nav } from "./home/nav";
 
+const Header = styled.h1`
+  margin-top: 48px;
+  margin-bottom: 32px;
+  text-align: center;
+`;
 export function Home() {
   const [addresses, setAddresses] = useState([]);
   useEffect(async () => {
@@ -17,11 +25,12 @@ export function Home() {
   }, []);
   return (
     <AppContext.Provider value={addresses}>
+      <GlobalStyle />
       <Layout>
-        <GlobalStyle />
-        <h1>同步传</h1>
+        <Header>同步传</Header>
+        {nav}
         <Switch>
-          <Route exact path="/">
+          <Route exact path="/message">
             <UploadTextForm />
           </Route>
         </Switch>

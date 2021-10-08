@@ -1,6 +1,5 @@
 import { Center } from "./center";
 import styled from "styled-components";
-import React from "react";
 
 const _Loading = styled(Center)`
   flex-direction: column;

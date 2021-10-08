@@ -1,4 +1,3 @@
-import React from "react";
 import { useQuery } from "../hooks/use_query";
 
 export const Downloads = () => {

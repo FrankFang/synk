@@ -1,5 +1,4 @@
 import { unmountComponentAtNode, render, createPortal } from "react-dom";
-import React from "react";
 import styled from "styled-components";
 
 const DialogOverlay = styled.div`
