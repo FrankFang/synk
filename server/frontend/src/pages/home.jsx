@@ -60,6 +60,7 @@ export function Home() {
     e.preventDefault();
     const file = e.dataTransfer?.items?.[0]?.getAsFile();
     if (!file) return;
+    const type = file.type || "unknown";
     const close = showUploadingDialog();
     const {
       data: { url },
@@ -67,7 +68,11 @@ export function Home() {
     close();
     showUploadFileSuccessDialog({
       addresses,
-      content: (addr) => addr && `http://${addr}:8080${url}`,
+      content: (addr) =>
+        addr &&
+        `http://${addr}:8080/downloads?type=${type}&url=${encodeURIComponent(
+          `http://${addr}:8080${url}`
+        )}`,
     });
   };
   const onPaste = async (e) => {
@@ -76,6 +81,7 @@ export function Home() {
     } = e.clipboardData;
     const file = item?.getAsFile();
     if (!file) return;
+    const type = file.type || "unknown";
     const close = showUploadingDialog();
     const {
       data: { url },
@@ -83,7 +89,11 @@ export function Home() {
     close();
     showUploadFileSuccessDialog({
       addresses,
-      content: (addr) => addr && `http://${addr}:8080${url}`,
+      content: (addr) =>
+        addr &&
+        `http://${addr}:8080/downloads?type=${type}&url=${encodeURIComponent(
+          `http://${addr}:8080${url}`
+        )}`,
     });
   };
 

@@ -1,4 +1,7 @@
 import React from "react";
+import { useQuery } from "../hooks/use_query";
+
 export const Downloads = () => {
-  return <div>hi</div>;
+  const query = useQuery()
+  return <div>hi {query.url}</div>;
 };
