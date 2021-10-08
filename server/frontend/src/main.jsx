@@ -11,11 +11,11 @@ ReactDOM.render(
   <React.StrictMode>
     <Router history={history}>
       <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
         <Route exact path="/downloads">
           <Downloads />
+        </Route>
+        <Route path="/">
+          <Home />
         </Route>
       </Switch>
     </Router>

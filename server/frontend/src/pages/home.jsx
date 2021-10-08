@@ -1,31 +1,9 @@
-import React, { useState, useEffect } from "react";
-import cs from "classnames";
-import {
-  BigTextarea,
-  Button,
-  Form,
-  GlobalStyle,
-  Layout,
-  showUploadingDialog,
-  showUploadTextSuccessDialog,
-  showUploadFileSuccessDialog,
-} from "./home_components";
+import React, { useEffect, useState } from "react";
+import { GlobalStyle, Layout } from "./home_components";
 import axios from "axios";
-import { AppContext } from "../shared/app_context";
-import { Center } from "../components/center";
-
-const uploadFile = (blob) => {
-  const formData = new FormData();
-  formData.append("raw", blob);
-  return axios({
-    method: "post",
-    url: "http://127.0.0.1:8080/api/v1/files",
-    data: formData,
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-};
+import { AppContext } from "src/shared/app_context";
+import { UploadTextForm } from "./home/upload_text_form";
+import {Switch, Route} from 'react-router'
 
 export function Home() {
   const [addresses, setAddresses] = useState([]);
@@ -37,89 +15,16 @@ export function Home() {
       .catch((e) => Promise.reject(e));
     setAddresses(addresses);
   }, []);
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    const close = showUploadingDialog();
-    const {
-      data: { content },
-    } = await axios.post("http://127.0.0.1:8080/api/v1/texts", {
-      raw: formData.raw,
-    });
-    close();
-    showUploadTextSuccessDialog({ addresses, content });
-  };
-  const [bigTextareClass, setBigTextareaClass] = useState("default");
-  const [formData, setFormData] = useState({});
-  const onDragOver = (e) => {
-    setBigTextareaClass("draging");
-  };
-  const onDragLeave = (e) => {
-    setBigTextareaClass("default");
-  };
-  const onDrop = async (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer?.items?.[0]?.getAsFile();
-    if (!file) return;
-    const type = file.type || "unknown";
-    const close = showUploadingDialog();
-    const {
-      data: { url },
-    } = await uploadFile(file);
-    close();
-    showUploadFileSuccessDialog({
-      addresses,
-      content: (addr) =>
-        addr &&
-        `http://${addr}:8080/downloads?type=${type}&url=${encodeURIComponent(
-          `http://${addr}:8080${url}`
-        )}`,
-    });
-  };
-  const onPaste = async (e) => {
-    const {
-      items: [item],
-    } = e.clipboardData;
-    const file = item?.getAsFile();
-    if (!file) return;
-    const type = file.type || "unknown";
-    const close = showUploadingDialog();
-    const {
-      data: { url },
-    } = await uploadFile(file);
-    close();
-    showUploadFileSuccessDialog({
-      addresses,
-      content: (addr) =>
-        addr &&
-        `http://${addr}:8080/downloads?type=${type}&url=${encodeURIComponent(
-          `http://${addr}:8080${url}`
-        )}`,
-    });
-  };
-
   return (
     <AppContext.Provider value={addresses}>
-      <Layout
-        onPaste={onPaste}
-        onDrop={onDrop}
-        onDragOver={(e) => e.preventDefault()}
-      >
+      <Layout>
         <GlobalStyle />
         <h1>同步传</h1>
-        <Form className="uploadForm" onSubmit={onSubmit}>
-          <div className="row">
-            <BigTextarea
-              className={cs(bigTextareClass)}
-              value={formData.raw}
-              onChange={(e) => setFormData({ raw: e.target.value })}
-              onDragOver={onDragOver}
-              onDragLeave={onDragLeave}
-            />
-          </div>
-          <Center className="row">
-            <Button type="submit">上传</Button>
-          </Center>
-        </Form>
+        <Switch>
+          <Route exact path="/">
+            <UploadTextForm />
+          </Route>
+        </Switch>
       </Layout>
     </AppContext.Provider>
   );
