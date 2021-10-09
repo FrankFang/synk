@@ -44,32 +44,11 @@ export const UploadFileForm = () => {
       context,
       content: (addr) =>
         addr &&
-        `http://${addr}:8080/downloads?type=${type}&url=${encodeURIComponent(
+        `http://${addr}:8080/static/downloads?type=${type}&url=${encodeURIComponent(
           `http://${addr}:8080${url}`
         )}`,
     });
   };
-  // const onPaste = async (e) => {
-  //   const {
-  //     items: [item],
-  //   } = e.clipboardData;
-  //   const file = item?.getAsFile();
-  //   if (!file) return;
-  //   const type = file.type || "unknown";
-  //   const close = showUploadingDialog();
-  //   const {
-  //     data: { url },
-  //   } = await uploadFile(file);
-  //   close();
-  //   showUploadFileSuccessDialog({
-  //     addresses,
-  //     content: (addr) =>
-  //       addr &&
-  //       `http://${addr}:8080/downloads?type=${type}&url=${encodeURIComponent(
-  //         `http://${addr}:8080${url}`
-  //       )}`,
-  //   });
-  // };
   const onChange = async (e) => {
     const file = e.target?.files?.[0];
     if (!file) return;
@@ -83,7 +62,7 @@ export const UploadFileForm = () => {
       context,
       content: (addr) =>
         addr &&
-        `http://${addr}:8080/downloads?type=${type}&url=${encodeURIComponent(
+        `http://${addr}:8080/static/downloads?type=${type}&url=${encodeURIComponent(
           `http://${addr}:8080${url}`
         )}`,
     });

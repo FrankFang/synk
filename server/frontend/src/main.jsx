@@ -6,7 +6,7 @@ import { Home } from "./pages/home";
 import { Downloads } from "./pages/downloads";
 import { ThemeProvider } from "styled-components";
 
-const history = createBrowserHistory();
+const history = createBrowserHistory({ basename: "/static/" });
 const theme = {
   borderColor: "#333",
   highlightColor: "#f5b70d",

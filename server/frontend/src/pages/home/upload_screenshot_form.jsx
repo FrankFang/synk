@@ -38,7 +38,7 @@ export const UploadScreenshotForm = () => {
       context,
       content: (addr) =>
         addr &&
-        `http://${addr}:8080/downloads?type=${type}&url=${encodeURIComponent(
+        `http://${addr}:8080/static/downloads?type=${type}&url=${encodeURIComponent(
           `http://${addr}:8080${url}`
         )}`,
     });
@@ -62,7 +62,7 @@ export const UploadScreenshotForm = () => {
       context,
       content: (addr) =>
         addr &&
-        `http://${addr}:8080/downloads?type=${type}&url=${encodeURIComponent(
+        `http://${addr}:8080/static/downloads?type=${type}&url=${encodeURIComponent(
           `http://${addr}:8080${url}`
         )}`,
     });
