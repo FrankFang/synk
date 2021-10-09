@@ -11,7 +11,7 @@ import { Center } from "../../components/center";
 import axios from "axios";
 
 export const UploadTextForm = () => {
-  const { addresses } = useContext(AppContext);
+  const context = useContext(AppContext);
   const [formData, setFormData] = useState({});
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +22,7 @@ export const UploadTextForm = () => {
       raw: formData.raw,
     });
     close();
-    showUploadTextSuccessDialog({ addresses, content });
+    showUploadTextSuccessDialog({ context, content });
   };
   return (
     <Form className="uploadForm" onSubmit={onSubmit}>

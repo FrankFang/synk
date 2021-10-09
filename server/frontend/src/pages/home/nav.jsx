@@ -8,7 +8,7 @@ const Nav = styled.nav`
     > li { flex-grow: 1; border-bottom: 1px solid #333;
       border-right: 1px solid ${({ theme }) => theme.borderColor};
       > a { display: block; padding: 8px 0; 
-        &.selected{ background: #f5b70d; }
+        &.selected{ background: ${({ theme }) => theme.highlightColor} }
       }
     }
   } 

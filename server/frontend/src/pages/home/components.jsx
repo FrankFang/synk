@@ -43,10 +43,7 @@ const Label = styled.label`
 `;
 const UploadSuccessDialog = ({ content, onClose }) => {
   const [address, setAddress] = useState(localStorage.getItem("address") || "");
-  const context = useContext(AppContext);
-  console.log('context');
-  console.log(context);
-  const addresses = [];
+  const { addresses } = useContext(AppContext);
   const onChange = (e) => {
     setAddress(e.target.value);
     localStorage.setItem("address", e.target.value);
@@ -61,7 +58,7 @@ const UploadSuccessDialog = ({ content, onClose }) => {
             <option value="" disabled>
               - 请选择 -
             </option>
-            {addresses.map((string) => (
+            {addresses?.map((string) => (
               <option key={string}>{string}</option>
             ))}
           </select>
@@ -78,22 +75,16 @@ const UploadSuccessDialog = ({ content, onClose }) => {
     </Pop>
   );
 };
-export const showUploadTextSuccessDialog = ({ addresses, content }) => {
+export const showUploadTextSuccessDialog = ({ context, content }) => {
   const close = createDialog(
-    <UploadSuccessDialog
-      addresses={addresses}
-      content={content}
-      onClose={() => close()}
-    />
+    <UploadSuccessDialog content={content} onClose={() => close()} />,
+    { context }
   );
 };
-export const showUploadFileSuccessDialog = ({ addresses, content }) => {
+export const showUploadFileSuccessDialog = ({ context, content }) => {
   const close = createDialog(
-    <UploadSuccessDialog
-      addresses={addresses}
-      content={content}
-      onClose={() => close()}
-    />
+    <UploadSuccessDialog content={content} onClose={() => close()} />,
+    { context }
   );
 };
 export const showUploadFailDialog = () => {

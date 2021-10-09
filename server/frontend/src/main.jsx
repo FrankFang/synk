@@ -9,6 +9,7 @@ import { ThemeProvider } from "styled-components";
 const history = createBrowserHistory();
 const theme = {
   borderColor: "#333",
+  highlightColor: "#f5b70d",
 };
 
 ReactDOM.render(

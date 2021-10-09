@@ -25,7 +25,7 @@ export function Home() {
     setAddresses(addresses);
   }, []);
   return (
-    <AppContext.Provider value={addresses}>
+    <AppContext.Provider value={{ addresses }}>
       <GlobalStyle />
       <Layout>
         <Header>同步传</Header>

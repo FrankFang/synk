@@ -1,4 +1,12 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, keyframes } from "styled-components";
+const spin = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+`;
 export const GlobalStyle = createGlobalStyle`
   * { box-sizing: border-box; padding: 0; margin: 0; }
   *::before, *::after {box-sizing: border-box;}
@@ -13,15 +21,7 @@ export const GlobalStyle = createGlobalStyle`
   :focus{ outline: none; }
 
   // helpers
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100%{
-      transform: rotate(360deg);
-    }
-  }
   .spin {
-    animation: spin 2s linear infinite;
+    animation: ${spin} 2s linear infinite;
   }
 `;

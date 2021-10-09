@@ -1,5 +1,7 @@
+import { createContext } from "react";
 import { unmountComponentAtNode, render, createPortal } from "react-dom";
 import styled from "styled-components";
+import { AppContext } from "../shared/app_context";
 
 const DialogOverlay = styled.div`
   position: fixed; z-index: 10; background: rgba(0,0,0,0.5); width: 100%;
@@ -12,7 +14,7 @@ const DialogContent = styled.div`
   border-radius: 8px;
 `;
 
-export const Dialog = ({ container, onClickOverlay, children, }) => {
+export const Dialog = ({ container, onClickOverlay, children }) => {
   return createPortal(
     <>
       <DialogOverlay onClick={onClickOverlay} />
@@ -22,19 +24,22 @@ export const Dialog = ({ container, onClickOverlay, children, }) => {
   );
 };
 
-export const createDialog = (content, closeOnClickOverlay ) => {
+export const createDialog = (content, options = {}) => {
+  const { closeOnClickOverlay, context } = options;
   const div = document.createElement("div");
   div.className = "tempApp";
   document.body.append(div);
   const onClickOverlay = () => {
-    if(closeOnClickOverlay){
+    if (closeOnClickOverlay) {
       close();
     }
   };
   render(
-    <Dialog container={div} onClickOverlay={onClickOverlay}>
-      {content}
-    </Dialog>,
+    <AppContext.Provider value={context}>
+      <Dialog container={div} onClickOverlay={onClickOverlay}>
+        {content}
+      </Dialog>
+    </AppContext.Provider>,
     div
   );
   const close = () => {
