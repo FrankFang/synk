@@ -16,7 +16,7 @@ import (
 //go:embed frontend/dist/*
 var FS embed.FS
 
-func Run() {
+func Run(ch chan interface{}) {
 	gin.SetMode(gin.ReleaseMode)
 	gin.DisableConsoleColor()
 	router := gin.Default()
@@ -47,6 +47,7 @@ func Run() {
 	})
 	runErr := router.Run(":8080") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 	if runErr != nil {
+		ch <- runErr
 		log.Fatal(runErr)
 	}
 }

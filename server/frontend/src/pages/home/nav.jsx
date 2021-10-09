@@ -3,8 +3,10 @@ import styled from "styled-components";
 const Nav = styled.nav`
   text-align: center;
   > ul {
-    display: flex; border-top: 1px solid #333; border-left: 1px solid #333;
-    > li { flex-grow: 1; border-right: 1px solid #333; border-bottom: 1px solid #333;
+    display: flex; border-top: 1px solid ${({ theme }) => theme.borderColor}; 
+    border-left: 1px solid ${({ theme }) => theme.borderColor};
+    > li { flex-grow: 1; border-bottom: 1px solid #333;
+      border-right: 1px solid ${({ theme }) => theme.borderColor};
       > a { display: block; padding: 8px 0; 
         &.selected{ background: #f5b70d; }
       }

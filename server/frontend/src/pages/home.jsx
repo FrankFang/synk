@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AppContext } from "../shared/app_context";
 import { Layout } from "./home/components";
 import { UploadTextForm } from "./home/upload_text_form";
+import { UploadFileForm } from "./home/upload_file_form";
 import styled from "styled-components";
 import { GlobalStyle } from "../shared/global_style";
 import { nav } from "./home/nav";
@@ -32,6 +33,9 @@ export function Home() {
         <Switch>
           <Route exact path="/message">
             <UploadTextForm />
+          </Route>
+          <Route exact path="/file">
+            <UploadFileForm />
           </Route>
         </Switch>
       </Layout>

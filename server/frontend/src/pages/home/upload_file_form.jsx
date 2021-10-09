@@ -1,15 +1,11 @@
-import React, { useContext, useState } from "react";
-import cs from "classnames";
+import React, { useContext } from "react";
+import styled from "styled-components";
 import {
-  BigTextarea,
-  Button,
   Form,
   showUploadingDialog,
-  showUploadTextSuccessDialog,
   showUploadFileSuccessDialog,
 } from "../../pages/home/components";
 import { AppContext } from "../../shared/app_context";
-import { Center } from "../../components/center";
 import axios from "axios";
 const uploadFile = (blob) => {
   const formData = new FormData();
@@ -24,16 +20,16 @@ const uploadFile = (blob) => {
   });
 };
 
-export const UploadTextForm = () => {
+export const UploadFileForm = () => {
   const { addresses } = useContext(AppContext);
-  const [bigTextareClass, setBigTextareaClass] = useState("default");
-  const [formData, setFormData] = useState({});
-  const onDragOver = (e) => {
-    setBigTextareaClass("draging");
-  };
-  const onDragLeave = (e) => {
-    setBigTextareaClass("default");
-  };
+  // const [bigTextareClass, setBigTextareaClass] = useState("default");
+  // const [formData, setFormData] = useState({});
+  // const onDragOver = (e) => {
+  //   setBigTextareaClass("draging");
+  // };
+  // const onDragLeave = (e) => {
+  //   setBigTextareaClass("default");
+  // };
   const onDrop = async (e) => {
     e.preventDefault();
     const file = e.dataTransfer?.items?.[0]?.getAsFile();
@@ -53,11 +49,29 @@ export const UploadTextForm = () => {
         )}`,
     });
   };
-  const onPaste = async (e) => {
-    const {
-      items: [item],
-    } = e.clipboardData;
-    const file = item?.getAsFile();
+  // const onPaste = async (e) => {
+  //   const {
+  //     items: [item],
+  //   } = e.clipboardData;
+  //   const file = item?.getAsFile();
+  //   if (!file) return;
+  //   const type = file.type || "unknown";
+  //   const close = showUploadingDialog();
+  //   const {
+  //     data: { url },
+  //   } = await uploadFile(file);
+  //   close();
+  //   showUploadFileSuccessDialog({
+  //     addresses,
+  //     content: (addr) =>
+  //       addr &&
+  //       `http://${addr}:8080/downloads?type=${type}&url=${encodeURIComponent(
+  //         `http://${addr}:8080${url}`
+  //       )}`,
+  //   });
+  // };
+  const onChange = async (e) => {
+    const file = e.target?.files?.[0];
     if (!file) return;
     const type = file.type || "unknown";
     const close = showUploadingDialog();
@@ -74,37 +88,29 @@ export const UploadTextForm = () => {
         )}`,
     });
   };
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    const close = showUploadingDialog();
-    const {
-      data: { content },
-    } = await axios.post("http://127.0.0.1:8080/api/v1/texts", {
-      raw: formData.raw,
-    });
-    close();
-    showUploadTextSuccessDialog({ addresses, content });
-  };
   return (
     <Form
       className="uploadForm"
-      onSubmit={onSubmit}
-      onPaste={onPaste}
       onDrop={onDrop}
       onDragOver={(e) => e.preventDefault()}
     >
       <div className="row">
-        <BigTextarea
-          className={cs(bigTextareClass)}
-          value={formData.raw}
-          onChange={(e) => setFormData({ raw: e.target.value })}
-          onDragOver={onDragOver}
-          onDragLeave={onDragLeave}
-        />
+        <Box>
+          <FileInput type="file" value="" onChange={onChange} />
+          <p>点击打开文件 或 拖拽文件至此</p>
+        </Box>
       </div>
-      <Center className="row">
-        <Button type="submit">上传</Button>
-      </Center>
     </Form>
   );
 };
+const Box = styled.div`
+  min-height: 160px; border: 2px dashed ${({ theme }) => theme.borderColor}; 
+  position: relative; overflow: hidden;
+  display: flex; justify-content: center; align-items: center; border-radius: 8px;
+  > p {
+  }
+`;
+const FileInput = styled.input`
+  position: absolute; right: 0; top: 0; width: 100%; height: 100%;
+  opacity: 0; cursor: pointer;
+`;

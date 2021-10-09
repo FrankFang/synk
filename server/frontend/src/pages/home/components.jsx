@@ -1,8 +1,9 @@
 import { createDialog } from "../../components/dialog";
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Qrcode } from "../../components/qrcode";
 import { Loading } from "../../components/loading";
+import { AppContext } from "../../shared/app_context";
 
 export const Layout = styled.div`
   min-height: 100vh; display: flex; align-items: stretch; flex-direction: column;
@@ -40,8 +41,12 @@ const Label = styled.label`
   justify-content: flex-start; align-items: center;
   min-height: 40px;
 `;
-const UploadSuccessDialog = ({ addresses, content, onClose }) => {
+const UploadSuccessDialog = ({ content, onClose }) => {
   const [address, setAddress] = useState(localStorage.getItem("address") || "");
+  const context = useContext(AppContext);
+  console.log('context');
+  console.log(context);
+  const addresses = [];
   const onChange = (e) => {
     setAddress(e.target.value);
     localStorage.setItem("address", e.target.value);
