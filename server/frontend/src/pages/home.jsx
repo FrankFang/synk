@@ -8,6 +8,7 @@ import { UploadFileForm } from "./home/upload_file_form";
 import styled from "styled-components";
 import { GlobalStyle } from "../shared/global_style";
 import { nav } from "./home/nav";
+import { UploadScreenshotForm } from "./home/upload_screenshot_form";
 
 const Header = styled.h1`
   margin-top: 48px;
@@ -36,6 +37,9 @@ export function Home() {
           </Route>
           <Route exact path="/file">
             <UploadFileForm />
+          </Route>
+          <Route exact path="/screenshot">
+            <UploadScreenshotForm />
           </Route>
         </Switch>
       </Layout>
