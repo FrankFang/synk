@@ -8,7 +8,7 @@ import {
 } from "../../pages/home/components";
 import { AppContext } from "../../shared/app_context";
 import { Center } from "../../components/center";
-import axios from "axios";
+import { http } from "../../shared/http";
 
 export const UploadTextForm = () => {
   const context = useContext(AppContext);
@@ -18,11 +18,13 @@ export const UploadTextForm = () => {
     const close = showUploadingDialog();
     const {
       data: { content },
-    } = await axios.post("http://127.0.0.1:8080/api/v1/texts", {
+    } = await http.post("/texts", {
       raw: formData.raw,
-    });
+    })
     close();
-    showUploadTextSuccessDialog({ context, content });
+    showUploadTextSuccessDialog({
+      context, content: (addr) => addr && `http://${addr}:8080/static/downloads?type=text&content=${encodeURIComponent(content)}`
+    });
   };
   return (
     <Form className="uploadForm" onSubmit={onSubmit}>

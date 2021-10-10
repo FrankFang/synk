@@ -12,6 +12,11 @@ export const Layout = styled.div`
     max-width: 600px; 
   }
 `;
+export const Header = styled.h1`
+  margin-top: 48px;
+  margin-bottom: 32px;
+  text-align: center;
+`;
 export const BigTextarea = styled.textarea`
   width: 100%;
   min-height: 160px;

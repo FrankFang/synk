@@ -5,6 +5,7 @@ import { createBrowserHistory } from "history";
 import { Home } from "./pages/home";
 import { Downloads } from "./pages/downloads";
 import { ThemeProvider } from "styled-components";
+import { GlobalStyle } from './shared/global_style'
 
 const history = createBrowserHistory({ basename: "/static/" });
 const theme = {
@@ -15,6 +16,7 @@ const theme = {
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
+      <GlobalStyle />
       <Router history={history}>
         <Switch>
           <Redirect exact from="/" to="/message" />
@@ -23,6 +25,9 @@ ReactDOM.render(
           </Route>
           <Route path="/">
             <Home />
+          </Route>
+          <Route path="*">
+            <div>404</div>
           </Route>
         </Switch>
       </Router>

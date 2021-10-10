@@ -2,6 +2,7 @@ package synk
 
 import (
 	"embed"
+	"fmt"
 	"io/fs"
 	"log"
 	"net/http"
@@ -16,7 +17,7 @@ import (
 //go:embed frontend/dist/*
 var FS embed.FS
 
-func Run(ch chan interface{}) {
+func Run(start chan int, end chan interface{}) {
 	gin.SetMode(gin.ReleaseMode)
 	gin.DisableConsoleColor()
 	router := gin.Default()
@@ -45,9 +46,11 @@ func Run(ch chan interface{}) {
 			c.Status(http.StatusNotFound)
 		}
 	})
-	runErr := router.Run(":8080") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	port := 8080
+	start <- port
+	runErr := router.Run(fmt.Sprintf(":%d", port))
 	if runErr != nil {
-		ch <- runErr
+		end <- runErr
 		log.Fatal(runErr)
 	}
 }
