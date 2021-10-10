@@ -16,7 +16,7 @@ export const GlobalStyle = createGlobalStyle`
   }
   a {text-decoration: none; color: inherit;}
   img {max-width: 100%; max-height: 100%; }
-  input {font: inherit;}
+  input, button {font: inherit;}
   ul, ol {list-style: none; }
   img{vertical-align: middle;}
   :focus{ outline: none; }

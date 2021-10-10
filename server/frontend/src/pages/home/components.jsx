@@ -44,7 +44,7 @@ const Span = styled.span`
 const Label = styled.label`
   display: flex; padding: 4px 0; margin: 4px 0;
   justify-content: flex-start; align-items: center;
-  min-height: 40px;
+  min-height: 40px; white-space: nowrap;
 `;
 const UploadSuccessDialog = ({ content, onClose }) => {
   const [address, setAddress] = useState(localStorage.getItem("address") || "");
