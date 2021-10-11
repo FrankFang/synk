@@ -4,6 +4,7 @@ import React, { useContext, useState } from "react";
 import { Qrcode } from "../../components/qrcode";
 import { Loading } from "../../components/loading";
 import { AppContext } from "../../shared/app_context";
+import { Center } from "../../components/center";
 
 export const Layout = styled.div`
   min-height: 100vh; display: flex; align-items: stretch; flex-direction: column;
@@ -59,7 +60,7 @@ const UploadSuccessDialog = ({ content, onClose }) => {
       <div>上传成功</div>
       <div>
         <Label>
-          <Span>请选择当前局域网IP</Span>
+          <Span>请选择手机可以访问的局域网IP</Span>
           <select value={address} onChange={onChange}>
             <option value="" disabled>
               - 请选择 -
@@ -70,14 +71,16 @@ const UploadSuccessDialog = ({ content, onClose }) => {
           </select>
         </Label>
       </div>
-      <div>
+      <Center>
         {content ? (
           <Qrcode
             content={typeof content === "string" ? content : content(address)}
           />
         ) : null}
-      </div>
-      <button onClick={onClose}>关闭</button>
+      </Center>
+      <Center>
+        <Button onClick={onClose}>关闭</Button>
+      </Center>
     </Pop>
   );
 };

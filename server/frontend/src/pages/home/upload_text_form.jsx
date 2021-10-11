@@ -12,7 +12,7 @@ import { http } from "../../shared/http";
 
 export const UploadTextForm = () => {
   const context = useContext(AppContext);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({ raw: "" });
   const onSubmit = async (e) => {
     e.preventDefault();
     const close = showUploadingDialog();
@@ -23,7 +23,7 @@ export const UploadTextForm = () => {
     })
     close();
     showUploadTextSuccessDialog({
-      context, content: (addr) => addr && `http://${addr}:8080/static/downloads?type=text&url=${encodeURIComponent(url)}`
+      context, content: (addr) => addr && `http://${addr}:8080/static/downloads?type=text&url=http://${addr + ":8080" + encodeURIComponent(url)}`
     });
   };
   return (

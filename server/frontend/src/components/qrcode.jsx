@@ -13,7 +13,7 @@ export const Qrcode = ({ content }) => {
   const [error, setError] = useState(null);
   useEffect(() => {
     if (!content) return;
-    const url = `http://127.0.0.1:8080/api/v1/qrcodes?content=${content}`;
+    const url = `/api/v1/qrcodes?content=${content}`;
     setLoading(true);
     prefetch(url)
       .then(

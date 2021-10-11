@@ -12,21 +12,6 @@ import { history } from "../shared/history";
 export const Downloads = () => {
   const query = useQuery()
   const type = normalizeType(query.type)
-  const onClick = () => {
-    navigator.clipboard.writeText(text)
-    setVisible(true)
-  }
-  const [visible, setVisible] = useState(false)
-  const timer = useRef(null)
-  useEffect(() => {
-    if (visible === true) {
-      timer.current && clearTimeout(timer.current)
-      timer.current = setTimeout(() => {
-        setVisible(false)
-      }, 3 * 1000);
-    }
-  }, [visible])
-
   const [text, setText] = useState("")
   useEffect(() => {
     if (type === "text") {
@@ -44,8 +29,7 @@ export const Downloads = () => {
           <BigTextarea readOnly value={text} />
           <Space />
           <Center virtical>
-            <Button onClick={onClick}>点击复制文本</Button>
-            {visible ? <P>复制成功！</P> : null}
+            <Button>请手动复制上面文本</Button>
           </Center>
         </div>
       )

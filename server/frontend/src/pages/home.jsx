@@ -8,14 +8,15 @@ import { UploadFileForm } from "./home/upload_file_form";
 import { nav } from "./home/nav";
 import { UploadScreenshotForm } from "./home/upload_screenshot_form";
 import _ from "lodash";
+import { http } from "../shared/http";
 
 export function Home() {
   const [addresses, setAddresses] = useState([]);
   useEffect(async () => {
     const {
       data: { addresses },
-    } = await axios
-      .get("http://127.0.0.1:8080/api/v1/addresses")
+    } = await http
+      .get("/api/v1/addresses")
       .catch((e) => Promise.reject(e));
     setAddresses(_.uniq(addresses.concat("127.0.0.1")));
   }, []);

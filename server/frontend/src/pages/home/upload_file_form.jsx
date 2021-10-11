@@ -10,9 +10,9 @@ import axios from "axios";
 const uploadFile = (blob) => {
   const formData = new FormData();
   formData.append("raw", blob);
-  return axios({
+  return http({
     method: "post",
-    url: "http://127.0.0.1:8080/api/v1/files",
+    url: "/api/v1/files",
     data: formData,
     headers: {
       "Content-Type": "multipart/form-data",
