@@ -52,21 +52,27 @@ export const Downloads = () => {
       break;
     case 'file':
       node = (
-        <div>
-          <a href={query.url}>点击下载文件</a>
-        </div>
+        <Center virtical>
+          <a href={query.url}>
+            <svg><use xlinkHref="#icon-file"></use></svg>
+            <Space />
+            <Center>
+              <Button>点击下载文件</Button>
+            </Center>
+          </a>
+        </Center>
       )
       break;
     case 'image':
       node = (
-        <div>
-          <div>
+        <Center>
+          <a href={query.url}>
             <Picture src={query.url} />
-          </div>
-          <div>
-            <a href={query.url}>点击下载图片</a>
-          </div>
-        </div>
+            <Center>
+              <Button>点击下载图片</Button>
+            </Center>
+          </a>
+        </Center>
       )
       break;
   }

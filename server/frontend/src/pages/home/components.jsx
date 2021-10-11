@@ -31,6 +31,7 @@ export const Button = styled.button`
   border: 2px solid #666;
   background: #f5b70d;
   border-radius: 8px;
+  cursor: pointer;
 `;
 export const Form = styled.form`
   &> .row {
