@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { http } from "../shared/http";
+import { history } from "../shared/history";
 
 export const Downloads = () => {
   const query = useQuery()
@@ -69,10 +70,17 @@ export const Downloads = () => {
       )
       break;
   }
+  const onClickUpload = () => {
+    history.push("/")
+  }
   return (
     <Layout>
       <Header>同步传</Header>
       {node}
+      <Space x3 />
+      <Center>
+        <Button onClick={onClickUpload}>我也要上传</Button>
+      </Center>
     </Layout>
   )
 };
