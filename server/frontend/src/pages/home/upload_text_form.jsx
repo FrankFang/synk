@@ -17,13 +17,13 @@ export const UploadTextForm = () => {
     e.preventDefault();
     const close = showUploadingDialog();
     const {
-      data: { content },
-    } = await http.post("/texts", {
+      data: { url },
+    } = await http.post("/api/v1/texts", {
       raw: formData.raw,
     })
     close();
     showUploadTextSuccessDialog({
-      context, content: (addr) => addr && `http://${addr}:8080/static/downloads?type=text&content=${encodeURIComponent(content)}`
+      context, content: (addr) => addr && `http://${addr}:8080/static/downloads?type=text&url=${encodeURIComponent(url)}`
     });
   };
   return (

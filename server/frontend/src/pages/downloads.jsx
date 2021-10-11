@@ -6,12 +6,13 @@ import { Space } from "../components/space";
 import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
+import { http } from "../shared/http";
 
 export const Downloads = () => {
   const query = useQuery()
-  const type = simpifyType(query.type)
+  const type = normalizeType(query.type)
   const onClick = () => {
-    navigator.clipboard.writeText(query.content)
+    navigator.clipboard.writeText(text)
     setVisible(true)
   }
   const [visible, setVisible] = useState(false)
@@ -25,13 +26,21 @@ export const Downloads = () => {
     }
   }, [visible])
 
+  const [text, setText] = useState("")
+  useEffect(() => {
+    if (type === "text") {
+      http.get(query.url).then(({ data }) => {
+        setText(data)
+      })
+    }
+  }, [type])
 
   let node = null
   switch (type) {
     case 'text':
       node = (
         <div>
-          <BigTextarea readOnly value={query.content} />
+          <BigTextarea readOnly value={text} />
           <Space />
           <Center virtical>
             <Button onClick={onClick}>点击复制文本</Button>
@@ -75,7 +84,7 @@ const P = styled.p`
   margin: 8px 0;
 `
 
-const simpifyType = type => {
+const normalizeType = type => {
   if (/^image\/.*$/.test(type)) {
     return 'image'
   } else if (/^text(\/.*)?$/.test(type)) {
