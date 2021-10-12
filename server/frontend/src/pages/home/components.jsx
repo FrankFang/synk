@@ -8,6 +8,7 @@ import { Center } from "../../components/center";
 import { http } from "../../shared/http";
 import { getWsClient } from "../../shared/ws_client";
 import { clientId } from "../../initializers/client_id";
+import { Space } from "../../components/space";
 
 export const Layout = styled.div`
   min-height: 100vh; display: flex; align-items: stretch; flex-direction: column;
@@ -54,15 +55,16 @@ const Label = styled.label`
 const UploadSuccessDialog = ({ content, onClose }) => {
   const [address, setAddress] = useState(localStorage.getItem("address") || "");
   const context = useContext(AppContext);
-  const addresses = context?.addresses ?? null
+  const addressesRef = context?.addressesRef ?? null
   const onChange = (e) => {
     setAddress(e.target.value);
     localStorage.setItem("address", e.target.value);
   };
+  content = typeof content === "string" ? content : content(address)
   return (
     <Pop>
       <div>上传成功</div>
-      {addresses ?
+      {addressesRef.current ?
         <div>
           <Label>
             <Span>请选择手机可以访问的局域网IP</Span>
@@ -70,7 +72,7 @@ const UploadSuccessDialog = ({ content, onClose }) => {
               <option value="" disabled>
                 - 请选择 -
               </option>
-              {addresses?.map((string) => (
+              {addressesRef.current?.map((string) => (
                 <option key={string}>{string}</option>
               ))}
             </select>
@@ -79,12 +81,12 @@ const UploadSuccessDialog = ({ content, onClose }) => {
         : null
       }
       <Center>
-        {content ? (
-          <Qrcode
-            content={typeof content === "string" ? content : content(address)}
-          />
-        ) : null}
+        {content ? <Qrcode content={content} /> : null}
       </Center>
+      <Center>
+        {content ? <a href={content}>点击下载</a> : null}
+      </Center>
+      <Space />
       <Center>
         <Button onClick={onClose}>关闭</Button>
       </Center>
@@ -118,15 +120,16 @@ const Pop = styled.div`
   padding: 16px;
 `;
 
+const notifyPc = (response, type) => {
+  getWsClient().then(c => {
+    c.send({ clientId, type, url: response.data.url })
+  })
+  return response
+}
 export const uploadText = (text) => {
   return http.post("/api/v1/texts", {
     raw: text
-  }).then((response) => {
-    getWsClient().then(c => {
-      c.send({ clientId, type: 'text', url: response.data.url })
-    })
-    return response
-  })
+  }).then(r => notifyPc(r, 'text'))
 }
 export const uploadFile = (blob) => {
   const formData = new FormData();
@@ -138,5 +141,5 @@ export const uploadFile = (blob) => {
     headers: {
       "Content-Type": "multipart/form-data",
     },
-  });
+  }).then(r => notifyPc(r, 'file'))
 };
