@@ -1,4 +1,4 @@
-package synk
+package server
 
 import (
 	"embed"
@@ -8,8 +8,9 @@ import (
 	"net/http"
 	"strings"
 
-	controllers "synk/server/controllers"
-	initializers "synk/server/initializers"
+	"synk/server/controllers"
+	"synk/server/initializers"
+	"synk/server/ws"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,6 +23,11 @@ func Run(start chan int, end chan interface{}) {
 	gin.DisableConsoleColor()
 	router := gin.Default()
 	initializers.InitCors(router)
+	hub := ws.NewHub()
+	go hub.Run()
+	router.GET("/ws", func(c *gin.Context) {
+		ws.HttpController(c, hub)
+	})
 	router.GET("/uploads/:path", controllers.UploadsController)
 	router.GET("/api/v1/addresses", controllers.AddressesController)
 	router.GET("/api/v1/qrcodes", controllers.QrcodesController)
@@ -46,7 +52,7 @@ func Run(start chan int, end chan interface{}) {
 			c.Status(http.StatusNotFound)
 		}
 	})
-	port := 8080
+	port := 27149
 	start <- port
 	runErr := router.Run(fmt.Sprintf(":%d", port))
 	if runErr != nil {

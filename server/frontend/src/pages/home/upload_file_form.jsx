@@ -4,21 +4,9 @@ import {
   Form,
   showUploadingDialog,
   showUploadFileSuccessDialog,
+  uploadFile,
 } from "../../pages/home/components";
 import { AppContext } from "../../shared/app_context";
-import axios from "axios";
-const uploadFile = (blob) => {
-  const formData = new FormData();
-  formData.append("raw", blob);
-  return http({
-    method: "post",
-    url: "/api/v1/files",
-    data: formData,
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-};
 
 export const UploadFileForm = () => {
   const context = useContext(AppContext);
@@ -35,17 +23,14 @@ export const UploadFileForm = () => {
     const file = e.dataTransfer?.items?.[0]?.getAsFile();
     if (!file) return;
     const type = file.type || "unknown";
-    const close = showUploadingDialog();
-    const {
-      data: { url },
-    } = await uploadFile(file);
-    close();
+    showUploadingDialog();
+    const { data: { url } } = await uploadFile(file);
     showUploadFileSuccessDialog({
       context,
       content: (addr) =>
         addr &&
-        `http://${addr}:8080/static/downloads?type=${type}&url=${encodeURIComponent(
-          `http://${addr}:8080${url}`
+        `http://${addr}:27149/static/downloads?type=${type}&url=${encodeURIComponent(
+          `http://${addr}:27149${url}`
         )}`,
     });
   };
@@ -53,17 +38,14 @@ export const UploadFileForm = () => {
     const file = e.target?.files?.[0];
     if (!file) return;
     const type = file.type || "unknown";
-    const close = showUploadingDialog();
-    const {
-      data: { url },
-    } = await uploadFile(file);
-    close();
+    showUploadingDialog();
+    const { data: { url } } = await uploadFile(file);
     showUploadFileSuccessDialog({
       context,
       content: (addr) =>
         addr &&
-        `http://${addr}:8080/static/downloads?type=${type}&url=${encodeURIComponent(
-          `http://${addr}:8080${url}`
+        `http://${addr}:27149/static/downloads?type=${type}&url=${encodeURIComponent(
+          `http://${addr}:27149${url}`
         )}`,
     });
   };

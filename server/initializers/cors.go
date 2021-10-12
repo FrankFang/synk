@@ -1,4 +1,4 @@
-package synk
+package initializers
 
 import (
 	"log"

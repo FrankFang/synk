@@ -1,4 +1,4 @@
-package synk
+package controllers
 
 import (
 	"net/http"

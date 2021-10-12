@@ -24,14 +24,23 @@ export const Dialog = ({ container, onClickOverlay, children }) => {
   );
 };
 
+let lastDiv = null
+
+const close = (div) => {
+  if (!div) return
+  unmountComponentAtNode(div);
+  div.remove();
+  lastDiv = null
+};
 export const createDialog = (content, options = {}) => {
+  close(lastDiv)
   const { closeOnClickOverlay, context } = options;
-  const div = document.createElement("div");
+  const div = lastDiv = document.createElement("div");
   div.className = "tempApp";
   document.body.append(div);
   const onClickOverlay = () => {
     if (closeOnClickOverlay) {
-      close();
+      close(div);
     }
   };
   render(
@@ -42,9 +51,5 @@ export const createDialog = (content, options = {}) => {
     </AppContext.Provider>,
     div
   );
-  const close = () => {
-    unmountComponentAtNode(div);
-    div.remove();
-  };
-  return close;
+  return () => close(div);
 };

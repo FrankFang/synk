@@ -1,4 +1,4 @@
-package synk
+package config
 
 import (
 	"log"

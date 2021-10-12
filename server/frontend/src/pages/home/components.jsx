@@ -5,6 +5,9 @@ import { Qrcode } from "../../components/qrcode";
 import { Loading } from "../../components/loading";
 import { AppContext } from "../../shared/app_context";
 import { Center } from "../../components/center";
+import { http } from "../../shared/http";
+import { getWsClient } from "../../shared/ws_client";
+import { clientId } from "../../initializers/client_id";
 
 export const Layout = styled.div`
   min-height: 100vh; display: flex; align-items: stretch; flex-direction: column;
@@ -50,7 +53,8 @@ const Label = styled.label`
 `;
 const UploadSuccessDialog = ({ content, onClose }) => {
   const [address, setAddress] = useState(localStorage.getItem("address") || "");
-  const { addresses } = useContext(AppContext);
+  const context = useContext(AppContext);
+  const addresses = context?.addresses ?? null
   const onChange = (e) => {
     setAddress(e.target.value);
     localStorage.setItem("address", e.target.value);
@@ -58,19 +62,22 @@ const UploadSuccessDialog = ({ content, onClose }) => {
   return (
     <Pop>
       <div>上传成功</div>
-      <div>
-        <Label>
-          <Span>请选择手机可以访问的局域网IP</Span>
-          <select value={address} onChange={onChange}>
-            <option value="" disabled>
-              - 请选择 -
-            </option>
-            {addresses?.map((string) => (
-              <option key={string}>{string}</option>
-            ))}
-          </select>
-        </Label>
-      </div>
+      {addresses ?
+        <div>
+          <Label>
+            <Span>请选择手机可以访问的局域网IP</Span>
+            <select value={address} onChange={onChange}>
+              <option value="" disabled>
+                - 请选择 -
+              </option>
+              {addresses?.map((string) => (
+                <option key={string}>{string}</option>
+              ))}
+            </select>
+          </Label>
+        </div>
+        : null
+      }
       <Center>
         {content ? (
           <Qrcode
@@ -97,7 +104,7 @@ export const showUploadFileSuccessDialog = ({ context, content }) => {
   );
 };
 export const showUploadFailDialog = () => {
-  const close = createDialog(
+  return createDialog(
     <Pop>
       <div>上传失败</div>
       <button onClick={() => close()}>关闭</button>
@@ -110,3 +117,26 @@ export const showUploadingDialog = () => {
 const Pop = styled.div`
   padding: 16px;
 `;
+
+export const uploadText = (text) => {
+  return http.post("/api/v1/texts", {
+    raw: text
+  }).then((response) => {
+    getWsClient().then(c => {
+      c.send({ clientId, type: 'text', url: response.data.url })
+    })
+    return response
+  })
+}
+export const uploadFile = (blob) => {
+  const formData = new FormData();
+  formData.append("raw", blob);
+  return http({
+    method: "post",
+    url: "/api/v1/files",
+    data: formData,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};

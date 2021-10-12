@@ -25,7 +25,7 @@ func main() {
 	endWaiter.Add(1)
 	start := make(chan int)
 	end := make(chan interface{})
-	go server.Run(start, end) // 8080
+	go server.Run(start, end)
 	go func(start chan int, quit chan interface{}) {
 		port := <-start
 		defer recoverFromError()
