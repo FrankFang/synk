@@ -53,7 +53,7 @@ export const Downloads = () => {
           <a href={query.url}>
             <Picture src={query.url} />
             <Center>
-              <Button>点击下载图片</Button>
+              <Button>长按或点击，即可下载图片</Button>
             </Center>
           </a>
         </Center>

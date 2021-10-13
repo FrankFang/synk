@@ -48,10 +48,17 @@ const Span = styled.span`
   margin-right: 8px;
 `;
 const Label = styled.label`
-  display: flex; padding: 4px 0; margin: 4px 0;
+  display: flex; padding: 4px 0; 
   justify-content: flex-start; align-items: center;
   min-height: 40px; white-space: nowrap;
 `;
+const H2 = styled.h2`
+  font-weight: bold; font-size: 24px;
+  margin-bottom: 16px;
+`
+const P = styled.p`
+  a {text-decoration: underline;}
+`
 const UploadSuccessDialog = ({ content, onClose }) => {
   const [address, setAddress] = useState(localStorage.getItem("address") || "");
   const context = useContext(AppContext);
@@ -63,20 +70,25 @@ const UploadSuccessDialog = ({ content, onClose }) => {
   content = typeof content === "string" ? content : content(address)
   return (
     <Pop>
-      <div>上传成功</div>
+      <H2>上传成功</H2>
       {addressesRef.current ?
         <div>
-          <Label>
-            <Span>请选择手机可以访问的局域网IP</Span>
-            <select value={address} onChange={onChange}>
-              <option value="" disabled>
-                - 请选择 -
-              </option>
-              {addressesRef.current?.map((string) => (
-                <option key={string}>{string}</option>
-              ))}
-            </select>
-          </Label>
+          <P>
+            请 Windows 用户在防火墙入站规则中开通 27149 端口（<a href="https://jingyan.baidu.com/article/09ea3ede7311dec0afde3977.html" target="_blank" rel="noreferrer">教程</a>）
+          </P>
+          <P>
+            <Label>
+              <Span>请选择手机可以访问的局域网IP</Span>
+              <select value={address} onChange={onChange}>
+                <option value="" disabled>
+                  - 请选择 -
+                </option>
+                {addressesRef.current?.map((string) => (
+                  <option key={string}>{string}</option>
+                ))}
+              </select>
+            </Label>
+          </P>
         </div>
         : null
       }
@@ -84,7 +96,7 @@ const UploadSuccessDialog = ({ content, onClose }) => {
         {content ? <Qrcode content={content} /> : null}
       </Center>
       <Center>
-        {content ? <a href={content}>点击下载</a> : null}
+        {content ? <a href={content}>请 手机扫码 或 点击下载</a> : null}
       </Center>
       <Space />
       <Center>
