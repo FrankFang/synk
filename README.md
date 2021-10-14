@@ -75,6 +75,7 @@ Windows 用户需要在防火墙的入站规则中运行 27149 端口的连接�
 ```
 git clone git@github.com:FrankFang/synk.git
 cd synk
+cd server/frontend; yarn build; cd -
 ./scripts/build_for_mac.sh
 ./scripts/build_for_win.sh
 ```
