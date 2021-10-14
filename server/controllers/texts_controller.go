@@ -28,6 +28,11 @@ func TextsController(c *gin.Context) {
 			log.Fatal(err)
 		}
 		filename := uuid.New().String()
+		uploads := filepath.Join(dir, "uploads")
+		err = os.MkdirAll(uploads, os.ModePerm)
+		if err != nil {
+			log.Fatal(err)
+		}
 		fullpath := path.Join("uploads", filename+".txt")
 		err = ioutil.WriteFile(filepath.Join(dir, fullpath), []byte(json.Raw), 0644)
 		if err != nil {
