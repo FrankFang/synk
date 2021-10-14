@@ -1,20 +1,3 @@
-# 同步传接口文档
+# 两周，从零基础到做出一个 Go 项目
 
-## post /api/v1/materials
-
-params
-
-1. category - text | image | file
-2. raw - string | binary
-
-return value
-
-{
-  resource: {
-    id, category, content
-  },
-  errors: {
-    category: ['类型不支持', '不能为空'],
-    raw: ['太大','格式不正确'] 
-  }
-}
+大家好，我是一名 Go 语言的新手
