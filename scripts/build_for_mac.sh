@@ -1,6 +1,7 @@
 #!/bin/sh
+version=$(git describe --tags $(git rev-list --tags='v[0-9].[0-9]*' --max-count=1))
 
-APP="Synk.app"
+APP="Synk-${version}.app"
 mkdir -p build/$APP/Contents/MacOS
 mkdir -p build/$APP/Contents/Resources
 GOOS=darwin GOARCH=amd64 go build -o build/$APP/Contents/MacOS/synk
