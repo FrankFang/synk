@@ -70,10 +70,20 @@ router.POST("/api/v1/texts", controllers.TextsController)
 
 Windows 用户需要在防火墙的入站规则中运行 27149 端口的连接，否则此软件无法被手机访问。
 
-# 编译
+## 自行编译
 
 ```
+git clone git@github.com:FrankFang/synk.git
+cd synk
 ./scripts/build_for_mac.sh
 ./scripts/build_for_win.sh
 ```
+
+# 我的收获
+
+1. 知道如何用 Go 写一个发布订阅（使用 websocket 的时候看到别人的源码了）
+2. 知道 `ch2 <- ch1` 与 `ch2 <- (<-ch1)` 的区别了，前者一般是写错了
+3. 知道了 Go 应用代码引入本地包的方法
+
+
 
