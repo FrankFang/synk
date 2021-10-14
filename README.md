@@ -60,7 +60,7 @@ router.POST("/api/v1/texts", controllers.TextsController)
 
 共 400 行 Go 代码，700 行 JS 代码。
 
-# 使用
+# 如何使用
 
 目前我只测试了 Windows 系统，能正常运行。理论上 macOS 和 Linux 也能运行，但我并没有测试。
 
